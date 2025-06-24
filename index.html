@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>911 Tools</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #ffffff;
+      --dark: #0d0d0d;
+      --light: #1a1a1a;
+    }
+    * {
+      margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif;
+    }
+    body, html {
+      height: 100%;
+      background: var(--dark);
+      overflow-x: hidden;
+    }
+    /* خلفية متحركة */
+    body::before {
+      content: "";
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(120deg, rgba(255,204,0,0.1) 0%, rgba(255,255,255,0.05) 100%);
+      background-size: 200% 200%;
+      animation: moveBackground 10s linear infinite;
+      z-index: -1;
+    }
+    @keyframes moveBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    header {
+      position: fixed; top: 0; width: 100%; background: var(--light);
+      padding: 20px 40px; display: flex; justify-content: space-between; align-items: center;
+      z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      animation: slideDown 0.6s ease-out;
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .brand img {
+      width: 40px; height: 40px; border-radius: 50%;
+    }
+    .brand h1 {
+      font-size: 32px; color: var(--primary);
+    }
+    nav ul {
+      display: flex; list-style: none; gap: 30px;
+    }
+    nav a {
+      color: #fff; text-decoration: none; font-size: 18px;
+      position: relative; display: flex; align-items: center;
+      transition: 0.3s ease; cursor: pointer;
+    }
+    nav a img {
+      width: 18px; height: 18px; margin-left: 8px;
+    }
+    nav a::after {
+      content: '';
+      position: absolute; bottom: -5px; right: 0; width: 0; height: 2px;
+      background: var(--primary);
+      transition: 0.3s ease;
+    }
+    nav a.active::after,
+    nav a:hover::after {
+      width: 100%;
+    }
+    nav a.active,
+    nav a:hover {
+      color: var(--primary);
+    }
+    main {
+      padding-top: 120px; min-height: calc(100vh - 160px);
+      animation: fadeIn 1.2s ease;
+      padding-left: 40px; padding-right: 40px;
+    }
+    section {
+      padding: 60px 0;
+      animation: fadeInUp 1s ease;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: none;
+    }
+    section.active {
+      display: block;
+    }
+    .section-title {
+      font-size: 38px;
+      margin-bottom: 30px;
+      color: var(--primary);
+      text-align: center;
+    }
+    .search-box {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+    .search-box input {
+      width: 100%;
+      max-width: 500px;
+      padding: 15px;
+      font-size: 17px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill,minmax(280px,1fr));
+      gap: 25px;
+    }
+    .product {
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      transition: 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .product h3 {
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+    .product p {
+      flex-grow: 1;
+      color: #ddd;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+    .product a {
+      display: inline-block;
+      padding: 10px 20px;
+      background: var(--primary);
+      color: #000;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      text-align: center;
+      transition: background 0.3s ease;
+    }
+    .product a:hover {
+      background: #ffffff;
+    }
+    #noResults {
+      text-align: center;
+      color: #bbb;
+      display: none;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    .footer {
+      background: var(--light);
+      color: #999;
+      text-align: center;
+      padding: 25px;
+      font-size: 15px;
+      position: relative;
+      z-index: 1;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav ul {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      .brand {
+        margin-bottom: 10px;
+      }
+      main {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <img src="https://media.discordapp.net/attachments/1384816681242726420/1386609565705175122/New_Project_12.png?ex=685a544a&is=685902ca&hm=1ead1024e1ee568d1ea2b88ae5eb9aecf55e918d77a594f63fc64c9710040184&=&format=webp&quality=lossless&width=350&height=350" alt="logo" />
+      <h1>911 Tools</h1>
+      <a href="https://discord.gg/c91" target="_blank" class="top-discord-link">
+  <img src="https://pngimg.com/uploads/discord/discord_PNG8.png" alt="911 Tools Discord" />
+</a>    <nav>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#" class="nav-link active" data-section="home"><img src="https://cdn-icons-png.flaticon.com/128/1946/1946436.png" alt="home icon" />الرئيسية</a></li>
+        <li><a href="#" class="nav-link" data-section="products"><img src="https://cdn-icons-png.flaticon.com/128/1170/1170576.png" alt="products icon" />ادوات</a></li>
+        <li><a href="#" class="nav-link" data-section="contact"><img src="https://cdn-icons-png.flaticon.com/128/597/597177.png" alt="contact icon" />اتصل بنا</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+<section id="products" class="content-section">
+  <h2 class="section-title">ادوات</h2>
+  <div class="products" id="productsContainer">
+  
+    <div class="product">
+      <img src="https://cdn.discordapp.com/attachments/1383809326472364064/1386618171791904868/image.png?ex=685a5c4e&is=68590ace&hm=9898c828fef0f22aea39061b856b8821179a4094b3c75f99fac019a4f25bdfd1&" alt="Trigger Finder & Dumper">
+      <h3>Trigger Finder & Dumper</h3>
+      <p>يمكنك سحب ملفات و مشاهدة الترقرات</p>
+      <a href="https://cdn.discordapp.com/attachments/1383809326472364064/1386618264133832866/d3d10.dll?ex=685a5c64&is=68590ae4&hm=4d855f37fd3eb0a211c5494c36ca1032e7561ab7fda06d05cad48012880577e8&" target="_blank" rel="noopener">تحميل</a>
+    </div>
+        <div class="product">
+      <img src="https://media.discordapp.net/attachments/1384816681242726420/1387152153436622930/image.png?ex=685c4d9d&is=685afc1d&hm=e0a58c55f940d452b43ac4678565620c013b1ea5b9ff49e35c2c656f7dfb06e9&=&format=webp&quality=lossless" alt="Woofer All Games">
+      <h3>Woofer All Games</h3>
+      <p>فك باند العاب - Pass 1</p>
+      <a href="https://cdn.discordapp.com/attachments/1384816681242726420/1387152281983651930/SpooferCrack_1.zip?ex=685c4dbc&is=685afc3c&hm=7cf161ec02ce4fdd459d69de547aba95299a28c81d3dea42014dec35c094b7ae&" target="_blank" rel="noopener">تحميل</a>
+    </div>
+        <div class="product">
+      <img src="https://media.discordapp.net/attachments/1384816681242726420/1387152904049135777/684ce9bb11f0e.png?ex=685c4e50&is=685afcd0&hm=c328df20589280fe527481b07d73cfaf4060a3777872f6636099e1901f93a1d2&=&format=webp&quality=lossless" alt="Fortnite , MW Cleaner">
+      <h3>Fortnite , MW Cleaner</h3>
+      <p>Pass : 123</p>
+      <a href="https://cdn.discordapp.com/attachments/1384816681242726420/1387152977663627385/v1_1_1.rar?ex=685c4e61&is=685afce1&hm=eead70ecbc8c44058a32566fd5cfb2875697311af3ad9e47b5c9fa8117e640ad&" target="_blank" rel="noopener">تحميل</a>
+    </div>
+            <div class="product">
+      <img src="https://cdn.discordapp.com/attachments/1370881222712098947/1373703267095416903/image.png?ex=685c27dd&is=685ad65d&hm=54e20042afe83e7eb40be6c5bf4fda731896dbf481da11df20bde1fe13a1bb13&" alt="Fortnite intrnal Src">
+      <h3>Fortnite intrnal Src</h3>
+      <p>Pass : 123</p>
+      <a href="https://cdn.discordapp.com/attachments/1364372626935386112/1366694099436179496/fn_slotted.zip?ex=685bb491&is=685a6311&hm=e24455cc85742c3d997ff800c0c3b56db51b82fbed6432343b73bfa7d6c33051&" target="_blank" rel="noopener">تحميل</a>
+    </div>
+  </div>
+    </section>
+
+   <section id="contact" class="content-section">
+  <h2 class="section-title">اتصل بنا</h2>
+  <div class="contact-box">
+    <div class="contact-image">
+      <img src="https://cdn-icons-png.flaticon.com/512/561/561127.png" alt="صورة اتصل بنا" />
+    </div>
+    <div class="contact-info">
+      <p>تواصل معنا عبر وسائل التواصل الاجتماعي التالية:</p>
+      <ul>
+        <li>Discord : <a href="https://discord.com/invite/c91" target="_blank" style="color:var(--primary)">911 Tools</a></li>
+      </ul>
+      
+    </div>
+  </div>
+</section>
+
+<style>
+  .top-discord-link {
+  position: fixed;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  animation: fadeInDown 0.7s ease;
+}
+
+.top-discord-link img {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+}
+
+.top-discord-link img:hover {
+  transform: scale(1.1);
+}
+  .contact-box {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #222;
+    border-radius: 15px;
+    padding: 30px;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+    animation: fadeInUp 1s ease;
+  }
+  .contact-image img {
+    width: 180px;
+    height: 180px;
+    object-fit: contain;
+    border-radius: 15px;
+    border: 3px solid var(--primary);
+  }
+  .contact-info {
+    color: #ccc;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+  .contact-info p {
+    margin-bottom: 15px;
+  }
+  .contact-info ul {
+    list-style: none;
+    padding: 0;
+  }
+  .contact-info ul li {
+    margin-bottom: 10px;
+  }
+  @media (max-width: 768px) {
+    .contact-box {
+      flex-direction: column;
+      text-align: center;
+    }
+    .contact-image img {
+      margin-bottom: 20px;
+      width: 140px;
+      height: 140px;
+    }
+  }
+  
+</style>
+<section id="home" class="content-section active">
+  <h2 class="section-title">مرحبًا بك في 911 ل تحميل الادوات</h2>
+  <div class="about-box">
+    <p>
+ موقع 911 Tools هو منصة متخصصة في تقديم أدوات مميزة ومتنوعة المهتمين بالتطوير، حيث يتيح لك تحميل منتجات عالية الجودة مع شرح مفصل لكل أداة 
+لتسهيل استخدامها. الموقع يوفر بيئة آمنة وسهلة للتنقل بين الأقسام المختلفة، مع تحديثات مستمرة لضمان أحدث وأفضل الأدوات، ويدعم التواصل المباشر عبر وسائل التواصل الاجتماعي لتلبية احتياجات المستخدمين بسرعة وكفاءة.
+    </p>
+  </div>
+</section>
+
+<style>
+  .about-box {
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    background: #222;
+    border-radius: 15px;
+    padding: 30px 25px;
+    color: #ccc;
+    font-size: 18px;
+    line-height: 1.7;
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+    animation: fadeInUp 1s ease;
+    text-align: center;
+  }
+</style>
+
+  <script>
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.content-section');
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+
+        // إزالة تفعيل من كل الروابط
+        navLinks.forEach(l => l.classList.remove('active'));
+
+        // إضافة تفعيل للضغط عليه فقط
+        link.classList.add('active');
+
+        // اخفاء كل الأقسام
+        sections.forEach(section => section.classList.remove('active'));
+
+        // إظهار القسم المرتبط
+        const target = link.getAttribute('data-section');
+        const targetSection = document.getElementById(target);
+        if (targetSection) {
+          targetSection.classList.add('active');
+          window.scrollTo({ top: 0, behavior: 'smooth' }); // تصفح لأعلى الصفحة بسلاسة
+        }
+      });
+    });
+    
+  </script>
+
+</body>
+</html>

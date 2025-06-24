@@ -1,0 +1,47 @@
+.footer {
+  background: var(--light);
+  color: #999;
+  text-align: center;
+  padding: 25px;
+  font-size: 15px;
+  position: relative; /* اجعل الفوتر ضمن التدفق الطبيعي */
+  width: 100%;
+  margin-top: 40px; /* مسافة فاصلة فوق الفوتر */
+  box-sizing: border-box;
+  z-index: 1;
+}
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1; /* يشغل باقي المساحة */
+}
+.rules-box {
+  max-width: 800px;
+  margin: 0 auto 40px auto;
+  background: #222;
+  border-radius: 15px;
+  padding: 30px 25px;
+  color: #ccc;
+  font-size: 18px;
+  line-height: 1.7;
+  box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+  animation: fadeInUp 1s ease;
+}
+.rules-box {
+  background: #ffffff;
+}
+.product img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
